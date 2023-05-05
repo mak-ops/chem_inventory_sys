@@ -77,7 +77,6 @@ function generateRows() {
 
 // initial table generation
 loadData();
-
 generateRows();
 
 // add event listeners to sort buttons
