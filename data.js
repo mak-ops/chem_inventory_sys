@@ -126,26 +126,23 @@ upBtn.addEventListener("click", () => {
     if (index > 1) {
       const prevRow = tbody.rows[index - 2];
       tbody.insertBefore(selectedRow, prevRow);
+      [data[index - 1], data[index - 2]] = [data[index - 2], data[index - 1]];
     }
   }
 });
 
 // add event listener to down button
-
 downBtn.addEventListener("click", () => {
   const selectedRow = table.querySelector(".selected");
   if (selectedRow) {
-    const nextRow = selectedRow.nextElementSibling;
-    if (nextRow) {
+    const index = selectedRow.rowIndex;
+    if (index < tbody.rows.length - 1) {
+      const nextRow = selectedRow.nextElementSibling;
       tbody.insertBefore(nextRow, selectedRow);
-      const index = [...tbody.children].indexOf(selectedRow);
       [data[index], data[index + 1]] = [data[index + 1], data[index]];
-      nextRow.classList.add("selected");
-      selectedRow.classList.remove("selected");
     }
   }
 });
-
 
 // add event listener to delete button
 deleteBtn.addEventListener("click", () => {
