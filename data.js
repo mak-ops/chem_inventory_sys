@@ -47,15 +47,20 @@ let data   = [
 function saveData() {
   localStorage.setItem("myData", JSON.stringify(data));
   console.log("Data saved:", data);
+  alert("Data saved successfully!");
+  generateRows();
 }
 
-// function to load data from local storage
 function loadData() {
   const savedData = localStorage.getItem("myData");
   if (savedData) {
     data = JSON.parse(savedData);
   }
+  generateRows();
 }
+
+
+
 function generateRows() {
   tbody.innerHTML = "";
   data.forEach((row) => {
@@ -74,12 +79,18 @@ function generateRows() {
     tbody.appendChild(tr);
   });
 }
-
-// initial table generation
 loadData();
-generateRows();
 
-// add event listeners to sort buttons
+refreshBtn.addEventListener("click", () => {
+  loadData(data);
+  generateRows();
+});
+
+saveBtn.addEventListener("click", () => {
+  saveData();
+});
+
+
 table.querySelectorAll("th").forEach((th) => {
   th.addEventListener("click", () => {
     const column = th.getAttribute("data-column");
@@ -89,17 +100,6 @@ table.querySelectorAll("th").forEach((th) => {
   });
 });
 
-// add event listener to refresh button
-refreshBtn.addEventListener("click", () => {
-  generateRows();
-});
-
-// add event listener to save button
-saveBtn.addEventListener("click", () => {
-  saveData();
-});
-
-// add event listener to add button
 addBtn.addEventListener("click", () => {
   const id = data.length + 1;
   const newRow = {
@@ -117,7 +117,6 @@ addBtn.addEventListener("click", () => {
   generateRows(data);
 });
 
-// add event listener to up button
 upBtn.addEventListener("click", () => {
   const selectedRow = table.querySelector(".selected");
   if (selectedRow) {
@@ -130,12 +129,11 @@ upBtn.addEventListener("click", () => {
   }
 });
 
-// add event listener to down button
 downBtn.addEventListener("click", () => {
   const selectedRow = table.querySelector(".selected");
   if (selectedRow) {
     const index = selectedRow.rowIndex;
-    if (index < tbody.rows.length - 1) {
+    if (index < tbody.rows.length ) {
       const nextRow = selectedRow.nextElementSibling;
       tbody.insertBefore(nextRow, selectedRow);
       [data[index], data[index + 1]] = [data[index + 1], data[index]];
@@ -143,17 +141,19 @@ downBtn.addEventListener("click", () => {
   }
 });
 
-// add event listener to delete button
 deleteBtn.addEventListener("click", () => {
   const selectedRow = table.querySelector(".selected");
   if (selectedRow) {
     const index = [...tbody.children].indexOf(selectedRow);
     tbody.removeChild(selectedRow);
     data.splice(index, 1);
+    // Update the id of the remaining rows
+    for (let i = index; i < data.length; i++) {
+      data[i].id = i + 1;
+    }
   }
 });
 
-// add event listener to table rows
 tbody.addEventListener("click", (event) => {
   if (event.target.tagName === "TD") {
     const selectedRow = table.querySelector(".selected");
@@ -164,5 +164,4 @@ tbody.addEventListener("click", (event) => {
   }
 });
 
-// initial render of the table
 renderTable();
