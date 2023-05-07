@@ -2,4 +2,4 @@
 
 1.Table should sort in ascending and descending order on clicking the table column header.
 
-2.Use creative ideas to build edit functionality. Edit feature is not shown in the table.
+2.Used creative ideas to build edit functionality. Edit feature is not shown in the table.
